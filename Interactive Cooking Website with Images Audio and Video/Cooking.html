@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="Images\South_Indian.jpg">
+    <title> Amma's Kitchen - Recipes, Healthy meals, Audios and Videos</title>
+    </head>
+    <body>
+
+        <!--Header-->
+        <header>
+            <img src="Images\header_image.jpg" alt="Amma's Kitchen icon">
+            <h1>Amma's Kitchen</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">HOME</a></li>
+                    <li><a href="#">RECIPES</a></li>
+                    <li><a href="#">HEALTHY DIET</a></li>
+                    <li><a href="#">POPULAR</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <!--Section-->
+            <section>
+                <h2>Featured Recipes</h2>
+
+                <!--Article 1-->
+                <article>
+                    <h3>Crispy Dosa & Chicken Sukka</h3>
+                    <p>Crispy dosa with spicy chicken sukka🌶️</p>
+
+                    <!--Ingredients Table-->
+                    <table>
+                        <tr><th>Ingredient</th><th>Quantity</th></tr>
+                        <tr><td>Rice</td><td>2 cups</td></tr>
+                        <tr><td>Urad dal</td><td>1 cup</td></tr>
+                        <tr><td>Fenugreek Seeds</td><td>1 tbsp</td></tr>
+                        <tr><td>Raw Chicken</td><td>500 grams</td></tr>
+                        <tr><td>Onion</td><td> 1 medium size</td></tr>
+                        <tr><td>Spices</td><td>To taste</td></tr>
+                    </table>
+
+                    <!--Image-->
+                    <figure>
+                        <img src="Images\crispy_dosa.jpg" alt="Crispy Dosa" width="300">
+                        <figcaption>Delicious Crispy Dosa and Chicken Sukka ready to serve😋</figcaption>
+                    </figure>
+                </article>
+
+                <!--Video Tutorial for Crispy Dosa and Chicken Sukka-->
+                <article>
+                    <h3>Video Tutorials</h3>
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <iframe src="Audio_Videos\Crispy_Dosa_MakingVideo.mp4" 
+                                    title="Crispy Dosa Video" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+
+                        <div class="video-wrapper">
+                            <iframe src="Audio_Videos\Chicken_Sukka_MakingVideo.mp4"
+                                    title="Chicken Sukka Video" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Audio Guide-->
+                <article>
+                    <h3>Authentic Sambhar Audio Guide For Vegeterians</h3>
+                    <audio controls>
+                        <source src="Audio_Videos\sambhar_guide.mp3" type="audio/mpeg">
+                    </audio>
+                </article>
+            </section>
+
+            <!-- Healthy Diet Section -->
+            <section>
+                <h2>Healthy Diet Tips</h2>
+                <p>Tips to make South Indian meals healthier.</p>
+
+            <!-- Expandable Details -->
+                <details>
+                    <summary>Click to see tips</summary>
+                    <ul>
+                        <li>Use brown rice or millets for extra fiber.</li>
+                        <li>Include more steamed dishes like idli.</li>
+                        <li>Add fresh vegetables and lentils for protein.</li>
+                    </ul>
+                </details>
+
+                <!-- Subscription Form -->
+                <form>
+                    <h3>Subscribe for Recipes</h3>
+                    <label>Name:</label>
+                    <input type="text" name="name" placeholder="Your Name"><br><br>
+
+                    <label>Email:</label>
+                    <input type="email" name="email" placeholder="Your Email"><br><br>
+
+                    <label>Password:</label>
+                    <input type="password" name="password" placeholder="Create Password"><br><br>
+
+                    <label>Favorite Dish:</label>
+                    <input list="dishes" name="dish" placeholder="Choose a dish">
+                    <datalist id="dishes">
+                        <option value="Crispy Dosa">
+                        <option value="Chicken Sukka">
+                        <option value="Sambar">
+                        <option value="Vada">
+                    </datalist><br><br>
+
+                    <button type="submit">Subscribe</button>
+                </form>
+            </section>
+
+            <!-- Sidebar / Aside -->
+            <aside>
+                <h2>Quick Links</h2>
+                <ul>
+                    <li><a href="#" target="_blank">Popular Recipes</a></li>
+                    <li><a href="#">Cooking Tips</a></li>
+                    <li><a href="#">Contact Amma's Kitchen</a></li>
+                </ul>
+
+                <!-- Contact Information -->
+                <h3>Contact Info</h3>
+                <p>Phone: <a href="tel:+917892322024">+91 7892322024</a></p>
+                <p>Email: <a href="mailto:info@ammaskitchen.com">info@ammaskitchen.com</a></p>
+            </aside>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Amma's Kitchen. All rights reserved.</p>
+            <p>Follow us on: 
+                <a href="#">Facebook</a> | 
+                <a href="#">Instagram</a> | 
+                <a href="#">YouTube</a>
+            </p>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amma's Kitchen - Home</title>
+    <link rel="stylesheet" href="css\main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Amma's Kitchen</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="recipe.html">RECIPES</a></li>
+                <li><a href="#healthy">HEALTHY DIET</a></li>
+                <li><a href="#popular">POPULAR</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Main Content Section -->
+        <section>
+            <h2>Featured Recipes</h2>
+
+            <!-- CSS GRID LAYOUT #1 - Recipe Cards -->
+            <div class="recipe-grid">
+                <article class="recipe-card">
+                    <img src="images\crispy_dosa.jpg" alt="Crispy Dosa">
+                    <h3>Crispy Dosa</h3>
+                    <p>Golden crispy fermented crepe</p>
+                    <a href="recipe.html"><button>View Recipe</button></a>
+                </article>
+
+                <article class="recipe-card">
+                    <img src="images\chicken-sukka.jpg" alt="Chicken Sukka">
+                    <h3>Chicken Sukka</h3>
+                    <p>Spicy dry chicken curry</p>
+                    <a href="recipe.html"><button>View Recipe</button></a>
+                </article>
+
+                <article class="recipe-card">
+                    <img src="images\sambhar.jpg" alt="Sambar">
+                    <h3>Sambar</h3>
+                    <p>Traditional lentil stew</p>
+                    <a href="recipe.html"><button>View Recipe</button></a>
+                </article>
+            </div>
+
+            <!-- Recipe Details Article -->
+            <article class="main-recipe">
+                <h3>Crispy Dosa & Chicken Sukka</h3>
+                <p>Crispy dosa with spicy chicken sukka 🌶️</p>
+
+                <!-- FLEXBOX LAYOUT #1 - Recipe Info -->
+                <div class="recipe-info">
+                    <div class="info-box">
+                        <span>⏱️</span>
+                        <p>75 min</p>
+                    </div>
+                    <div class="info-box">
+                        <span>👥</span>
+                        <p>4 servings</p>
+                    </div>
+                    <div class="info-box">
+                        <span>⭐</span>
+                        <p>4.8/5</p>
+                    </div>
+                </div>
+
+                <!-- Ingredients Table -->
+                <h4>Ingredients</h4>
+                <table>
+                    <tr>
+                        <th>Ingredient</th>
+                        <th>Quantity</th>
+                    </tr>
+                    <tr>
+                        <td>Rice</td>
+                        <td>2 cups</td>
+                    </tr>
+                    <tr>
+                        <td>Urad dal</td>
+                        <td>1 cup</td>
+                    </tr>
+                    <tr>
+                        <td>Fenugreek Seeds</td>
+                        <td>1 tbsp</td>
+                    </tr>
+                    <tr>
+                        <td>Raw Chicken</td>
+                        <td>500 grams</td>
+                    </tr>
+                    <tr>
+                        <td>Onion</td>
+                        <td>1 medium</td>
+                    </tr>
+                    <tr>
+                        <td>Spices</td>
+                        <td>To taste</td>
+                    </tr>
+                </table>
+
+                <!-- Image -->
+                <figure>
+                    <img src="images\crispy_dosa.jpg" alt="Crispy Dosa" width="400">
+                    <figcaption>Delicious Crispy Dosa ready to serve 😋</figcaption>
+                </figure>
+            </article>
+
+            <!-- FLEXBOX LAYOUT #2 - Video Section -->
+            <article class="video-section">
+                <h3>Video Tutorials</h3>
+                <div class="video-container">
+                    <div class="video-box">
+                        <iframe src="Audio_Videos\Crispy_Dosa_MakingVideo.mp4" 
+                                title="Dosa Video" 
+                                frameborder="0">
+                        </iframe>
+                        <p>Crispy Dosa Making</p>
+                    </div>
+                    <div class="video-box">
+                        <iframe src="Audio_Videos\Chicken_Sukka_MakingVideo.mp4"
+                                title="Sukka Video" 
+                                frameborder="0">
+                        </iframe>
+                        <p>Chicken Sukka Recipe</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Audio Guide -->
+            <article class="audio-section">
+                <h3>🎧 Authentic Sambhar Audio Guide</h3>
+                <audio controls>
+                    <source src="Audio_Videos\sambhar_guide.mp3" type="audio/mpeg">
+                </audio>
+            </article>
+
+            <!-- Healthy Diet Section -->
+            <article id="healthy" class="health-section">
+                <h2>Healthy Diet Tips</h2>
+                <p>Make your South Indian meals healthier</p>
+
+                <details>
+                    <summary>Click to see tips</summary>
+                    <ul>
+                        <li>Use brown rice or millets for extra fiber</li>
+                        <li>Include more steamed dishes like idli</li>
+                        <li>Add fresh vegetables and lentils</li>
+                        <li>Reduce oil with non-stick cookware</li>
+                        <li>Choose coconut or olive oil</li>
+                    </ul>
+                </details>
+            </article>
+
+            <!-- Subscription Form -->
+            <article class="subscribe-section">
+                <h3>Subscribe for Weekly Recipes</h3>
+                <form>
+                    <label>Name:</label>
+                    <input type="text" name="name" placeholder="Your Name">
+
+                    <label>Email:</label>
+                    <input type="email" name="email" placeholder="Your Email">
+
+                    <label>Password:</label>
+                    <input type="password" name="password" placeholder="Password">
+
+                    <label>Favorite Dish:</label>
+                    <input list="dishes" name="dish" placeholder="Choose a dish">
+                    <datalist id="dishes">
+                        <option value="Crispy Dosa">
+                        <option value="Chicken Sukka">
+                        <option value="Sambar">
+                        <option value="Vada">
+                    </datalist>
+
+                    <button type="submit">Subscribe</button>
+                </form>
+            </article>
+        </section>
+
+        <!-- Sidebar -->
+        <aside>
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="recipe.html">Popular Recipes</a></li>
+                <li><a href="#healthy">Cooking Tips</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+
+            <h3>Contact Info</h3>
+            <p>📞 <a href="tel:+917892322024">+91 7892322024</a></p>
+            <p>✉️ <a href="mailto:info@ammaskitchen.com">info@ammaskitchen.com</a></p>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <p>&copy; 2025 Amma's Kitchen. All rights reserved.</p>
+        <p>
+            <a href="#">Facebook</a> | 
+            <a href="#">Instagram</a> | 
+            <a href="#">YouTube</a>
+        </p>
+    </footer>
+</body>
+</html>

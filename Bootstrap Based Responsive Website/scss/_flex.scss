@@ -1,0 +1,95 @@
+// FLEXBOX #1: Recipe Info Bar
+.recipe-info {
+  @include flex-layout(row, space-around, center);
+  flex-wrap: wrap;
+  gap: get-spacing('sm');
+  background-color: lighten($primary-color, 35%);
+  padding: get-spacing('md');
+  border-radius: $border-radius;
+  margin: get-spacing('md') 0;
+  
+  .info-box {
+    @include flex-layout(column, center, center);
+    min-width: 80px;
+    
+    span {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    
+    p {
+      font-weight: bold;
+      color: $secondary-color;
+      margin: 0;
+    }
+  }
+}
+
+// FLEXBOX #2: Video Container
+.video-container {
+  @include flex-layout(row, space-between, stretch);
+  gap: get-spacing('md');
+  
+  // Responsive: stack vertically on tablet
+  @include respond-to('tablet') {
+    @include flex-layout(column, flex-start, stretch);
+  }
+  
+  .video-box {
+    flex: 1;
+    min-width: 0;
+    
+    iframe {
+      width: 100%;
+      height: 315px;
+      border-radius: $border-radius;
+      box-shadow: $shadow-base;
+      
+      @include respond-to('tablet') {
+        height: 250px;
+      }
+    }
+    
+    p {
+      text-align: center;
+      margin-top: get-spacing('xs');
+      font-weight: bold;
+      color: $secondary-color;
+    }
+  }
+}
+
+// FLEXBOX #3: Cooking Steps
+.steps-flex {
+  .step {
+    @include flex-layout(row, flex-start, flex-start);
+    gap: get-spacing('md');
+    margin-bottom: get-spacing('lg');
+    
+    .step-number {
+      @include flex-layout(row, center, center);
+      width: 40px;
+      height: 40px;
+      background-color: $primary-color;
+      color: white;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    
+    .step-text {
+      flex: 1;
+      
+      h4 {
+        color: $secondary-color;
+        margin-bottom: get-spacing('xs');
+      }
+      
+      p {
+        color: $text-color;
+        line-height: 1.6;
+      }
+    }
+  }
+}

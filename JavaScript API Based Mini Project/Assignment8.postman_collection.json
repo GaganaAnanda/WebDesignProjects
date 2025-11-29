@@ -1,0 +1,115 @@
+{
+  "info": {
+    "name": "Assignment 8 - User Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Create User",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"Password123!\"\n}"
+        },
+        "url": "http://localhost:3000/user/create"
+      }
+    },
+    {
+      "name": "2. Get All Users",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/user/getAll"
+      }
+    },
+    {
+      "name": "3. Update User",
+      "request": {
+        "method": "PUT",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"fullName\": \"John Smith\",\n  \"password\": \"NewPassword123!\"\n}"
+        },
+        "url": "http://localhost:3000/user/edit"
+      }
+    },
+    {
+      "name": "4. Upload Image",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {"key": "email", "value": "john.doe@example.com", "type": "text"},
+            {"key": "image", "type": "file", "src": ""}
+          ]
+        },
+        "url": "http://localhost:3000/user/uploadImage"
+      }
+    },
+    {
+      "name": "5. Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john.doe@example.com\"\n}"
+        },
+        "url": "http://localhost:3000/user/delete"
+      }
+    },
+    {
+      "name": "Test - Invalid Email Format",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Test User\",\n  \"email\": \"invalidemail\",\n  \"password\": \"Password123!\"\n}"
+        },
+        "url": "http://localhost:3000/user/create"
+      }
+    },
+    {
+      "name": "Test - Invalid Name (Numbers)",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"John123\",\n  \"email\": \"test@example.com\",\n  \"password\": \"Password123!\"\n}"
+        },
+        "url": "http://localhost:3000/user/create"
+      }
+    },
+    {
+      "name": "Test - Weak Password",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"weak\"\n}"
+        },
+        "url": "http://localhost:3000/user/create"
+      }
+    },
+    {
+      "name": "Test - Upload Duplicate Image",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {"key": "email", "value": "john.doe@example.com", "type": "text"},
+            {"key": "image", "type": "file", "src": ""}
+          ]
+        },
+        "url": "http://localhost:3000/user/uploadImage"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+# Disable caching and ETags
+<FilesMatch "\.(html|js|css|json)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+    Header unset ETag
+    FileETag None
+</FilesMatch>
+
+# General cache disable
+Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+Header set Pragma "no-cache"
+Header set Expires "0"
+Header unset ETag
+FileETag None

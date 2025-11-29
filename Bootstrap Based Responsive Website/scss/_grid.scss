@@ -1,0 +1,80 @@
+// CSS GRID #1: Recipe Cards Grid (Home Page)
+.recipe-grid {
+  @include grid-layout(3, 20px);
+  margin: get-spacing('md') 0;
+  
+  // Responsive: 2 columns on tablet
+  @include respond-to('tablet') {
+    @include grid-layout(2, 15px);
+  }
+  
+  // Responsive: 1 column on mobile
+  @include respond-to('mobile') {
+    @include grid-layout(1, 10px);
+  }
+  
+  .recipe-card {
+    background-color: lighten($card-bg, 5%);
+    padding: get-spacing('md');
+    border-radius: $border-radius;
+    text-align: center;
+    box-shadow: $shadow-base;
+    transition: transform $transition-speed;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $shadow-hover;
+    }
+    
+    // IMAGE FIX - Limit recipe card image size
+    img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: $border-radius;
+      margin: 0 auto get-spacing('sm') auto;
+      display: block;
+    }
+    
+    h3 {
+      color: $primary-color;
+      margin: get-spacing('sm') 0;
+    }
+    
+    p {
+      color: $text-color;
+      margin-bottom: get-spacing('sm');
+    }
+    
+    button {
+      @include button-style($primary-color);
+    }
+  }
+}
+
+// CSS GRID #2: Ingredients Grid (Recipe Page)
+.ingredients-grid {
+  @include grid-layout(2, 30px);
+  margin: get-spacing('md') 0;
+  
+  // Responsive: 1 column on tablet and mobile
+  @include respond-to('tablet') {
+    @include grid-layout(1, 20px);
+  }
+  
+  .ingredient-column {
+    background-color: tint($card-bg, 30%);
+    padding: get-spacing('md');
+    border-radius: $border-radius;
+    
+    h4 {
+      color: $secondary-color;
+      margin-bottom: get-spacing('sm');
+      font-size: 18px;
+    }
+    
+    table {
+      margin: 0;
+    }
+  }
+}

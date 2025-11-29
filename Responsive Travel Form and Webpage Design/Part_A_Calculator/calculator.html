@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="calculator-card">
+            <header class="calculator-header">
+                <h1 id="welcomeMessage">Welcome!</h1>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </header>
+
+            <div class="calculator-body">
+                <h2>Basic Calculator</h2>
+                
+                <div class="form-group">
+                    <label for="number1">Number 1</label>
+                    <input 
+                        type="text" 
+                        id="number1" 
+                        placeholder="Enter first number"
+                    >
+                    <span class="error-message" id="number1Error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="number2">Number 2</label>
+                    <input 
+                        type="text" 
+                        id="number2" 
+                        placeholder="Enter second number"
+                    >
+                    <span class="error-message" id="number2Error"></span>
+                </div>
+
+                <div class="operations">
+                    <button class="btn btn-operation" data-operation="add">Add (+)</button>
+                    <button class="btn btn-operation" data-operation="subtract">Subtract (-)</button>
+                    <button class="btn btn-operation" data-operation="multiply">Multiply (×)</button>
+                    <button class="btn btn-operation" data-operation="divide">Divide (÷)</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="result">Result</label>
+                    <input 
+                        type="text" 
+                        id="result" 
+                        placeholder="Result will appear here"
+                        readonly
+                        disabled
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="calculator.js"></script>
+</body>
+</html>

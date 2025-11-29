@@ -1,0 +1,357 @@
+// Import all SCSS files
+@import 'variables';
+@import 'mixins';
+@import 'functions';
+@import 'grid';
+@import 'flex';
+
+// ============================================
+// GLOBAL STYLES
+// ============================================
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-family;
+  background-color: $bg-light;
+  color: $text-color;
+  line-height: 1.6;
+}
+
+// CSS Custom Properties (integrating SASS variables)
+:root {
+  --primary-color: #{$primary-color};
+  --secondary-color: #{$secondary-color};
+  --spacing: #{$spacing-base};
+}
+
+// ============================================
+// UTILITY CLASSES (Using Interpolation)
+// ============================================
+
+// Generate margin and padding classes
+@each $name, $value in $spacing-sizes {
+  .mt-#{$name} { margin-top: $value; }
+  .mb-#{$name} { margin-bottom: $value; }
+  .pt-#{$name} { padding-top: $value; }
+  .pb-#{$name} { padding-bottom: $value; }
+}
+
+// ============================================
+// HEADER & FOOTER
+// ============================================
+
+header, footer {
+  background-color: $dark-bg;
+  text-align: center;
+  padding: get-spacing('lg');
+  color: white;
+  margin: get-spacing('md') 0;
+  
+  h1 {
+    font-size: 32px;
+    margin: get-spacing('sm') 0;
+  }
+  
+  // IMAGE FIX - Limit header logo size
+  img {
+    max-width: 80px;
+    height: auto;
+    border-radius: $border-radius;
+  }
+}
+
+// ============================================
+// NAVIGATION (Using Nesting)
+// ============================================
+
+nav {
+  ul {
+    display: flex;
+    justify-content: center;
+    gap: get-spacing('md');
+    list-style: none;
+    padding: 0;
+    margin: get-spacing('sm') 0;
+    flex-wrap: wrap;
+    
+    li {
+      a {
+        color: $accent-color;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color $transition-speed;
+        
+        &:hover {
+          color: $hover-color;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// MAIN LAYOUT
+// ============================================
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  padding: get-spacing('md');
+  gap: get-spacing('md');
+  
+  @include respond-to('tablet') {
+    flex-direction: column;
+  }
+}
+
+section {
+  flex: 3;
+  min-width: 300px;
+  
+  h2 {
+    color: $primary-color;
+    font-size: 28px;
+    margin-bottom: get-spacing('md');
+    border-bottom: 3px solid $primary-color;
+    padding-bottom: get-spacing('sm');
+  }
+  
+  h3 {
+    color: $secondary-color;
+    margin: get-spacing('md') 0 get-spacing('sm') 0;
+  }
+}
+
+// ============================================
+// GLOBAL IMAGE FIX
+// ============================================
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// ============================================
+// ARTICLES
+// ============================================
+
+article {
+  background-color: $card-bg;
+  padding: get-spacing('md');
+  margin-bottom: get-spacing('md');
+  border-radius: $border-radius;
+  
+  &:hover {
+    box-shadow: $shadow-hover;
+  }
+}
+
+// ============================================
+// ASIDE / SIDEBAR
+// ============================================
+
+aside {
+  flex: 1;
+  background-color: $card-bg;
+  padding: get-spacing('md');
+  min-width: 200px;
+  border-radius: $border-radius;
+  
+  h2, h3 {
+    color: $primary-color;
+    margin-bottom: get-spacing('sm');
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    
+    li {
+      margin-bottom: get-spacing('xs');
+      
+      a {
+        color: $text-color;
+        text-decoration: none;
+        
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+  
+  button {
+    @include button-style($primary-color);
+    width: 100%;
+    margin-bottom: get-spacing('xs');
+  }
+}
+
+// ============================================
+// TABLES
+// ============================================
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: get-spacing('md') 0;
+  
+  th, td {
+    border: 1px solid $border-color;
+    padding: get-spacing('xs');
+    text-align: left;
+  }
+  
+  th {
+    background-color: $primary-color;
+    color: white;
+    font-weight: bold;
+  }
+  
+  td {
+    background-color: lighten($card-bg, 5%);
+  }
+}
+
+// ============================================
+// FIGURES
+// ============================================
+
+figure {
+  margin: get-spacing('md') 0;
+  text-align: center;
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: $border-radius;
+    box-shadow: $shadow-base;
+  }
+  
+  figcaption {
+    font-style: italic;
+    margin-top: get-spacing('xs');
+    color: lighten($text-color, 20%);
+  }
+}
+
+// ============================================
+// FORMS
+// ============================================
+
+form {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[list] {
+    width: 100%;
+    padding: get-spacing('xs');
+    margin: 5px 0 get-spacing('sm') 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 5px rgba($primary-color, 0.3);
+    }
+  }
+  
+  label {
+    font-weight: bold;
+    color: $text-color;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  button {
+    @include button-style($dark-bg, white, #ff5722);
+  }
+}
+
+// ============================================
+// BUTTONS
+// ============================================
+
+button {
+  @include button-style($dark-bg, white, #ff5722);
+}
+
+// ============================================
+// DETAILS/SUMMARY
+// ============================================
+
+details {
+  background-color: lighten($card-bg, 3%);
+  padding: get-spacing('md');
+  border-radius: $border-radius;
+  margin: get-spacing('md') 0;
+  
+  summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: $primary-color;
+    
+    &:hover {
+      color: $secondary-color;
+    }
+  }
+  
+  ul {
+    margin-top: get-spacing('sm');
+    padding-left: get-spacing('md');
+  }
+}
+
+// ============================================
+// AUDIO
+// ============================================
+
+audio {
+  width: 100%;
+  margin: get-spacing('sm') 0;
+}
+
+// ============================================
+// ADDITIONAL STYLES
+// ============================================
+
+.main-recipe, .video-section, .audio-section, 
+.health-section, .subscribe-section {
+  background-color: $card-bg;
+  padding: get-spacing('md');
+  margin-bottom: get-spacing('md');
+  border-radius: $border-radius;
+}
+
+// Links
+a {
+  transition: opacity $transition-speed;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Responsive Typography
+@include respond-to('tablet') {
+  h1 {
+    font-size: 28px;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
+  
+  h3 {
+    font-size: 20px;
+  }
+}

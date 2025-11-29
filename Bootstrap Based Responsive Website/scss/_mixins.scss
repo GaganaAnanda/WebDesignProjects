@@ -1,0 +1,47 @@
+// Responsive breakpoint mixin
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (max-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint '#{$breakpoint}' not found!";
+  }
+}
+
+// Button style mixin
+@mixin button-style($bg-color, $text-color: rgb(36, 9, 9), $hover-color: null) {
+  padding: 10px 20px;
+  background-color: $bg-color;
+  color: $text-color;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color $transition-speed;
+  
+  @if $hover-color {
+    &:hover {
+      background-color: $hover-color;
+    }
+  } @else {
+    &:hover {
+      background-color: darken($bg-color, 10%);
+    }
+  }
+}
+
+// Flexbox mixin
+@mixin flex-layout($direction: row, $justify: flex-start, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+// Grid mixin
+@mixin grid-layout($columns: 1, $gap: 20px) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}

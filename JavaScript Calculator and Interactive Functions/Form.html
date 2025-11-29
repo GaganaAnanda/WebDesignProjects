@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Feedback</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    label {
+      float: left;
+      width: 150px;
+      font-weight: bold;
+    }
+    
+    #container {
+      width: 700px;
+      margin: auto;
+      background-color: beige;
+      position: relative;
+    }
+    
+    main {
+      padding: 50px;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 12px;
+      margin-left: 150px;
+      margin-top: 5px;
+      display: block;
+      clear: both;
+      min-height: 18px;
+    }
+
+    .field-group {
+      margin-bottom: 10px;
+      clear: both;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: 2px solid #4CAF50;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    input[type="submit"]:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    input[type="reset"] {
+      background-color: #f44336;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .char-counter {
+      font-size: 12px;
+      color: #666;
+      margin-left: 150px;
+      margin-top: 3px;
+      display: block;
+    }
+
+    #dynamicCheckboxContainer {
+      margin-left: 150px;
+      margin-top: 10px;
+    }
+
+    .dynamic-checkbox-item {
+      margin-bottom: 10px;
+    }
+
+    .dynamic-textfield {
+      margin-left: 20px;
+      margin-top: 5px;
+      padding: 5px;
+      width: 300px;
+    }
+
+    #resultsTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+
+    #resultsTable th,
+    #resultsTable td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    #resultsTable th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #resultsTable tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    /* AI Assistant Styles */
+    #aiAssistantBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #2196F3;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+
+    #aiAssistantBtn:hover {
+      background-color: #0b7dda;
+    }
+
+    #chatWindow {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      z-index: 1001;
+      flex-direction: column;
+    }
+
+    #chatWindow.active {
+      display: flex;
+    }
+
+    #chatHeader {
+      background-color: #2196F3;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #closeChat {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+    }
+
+    #chatMessages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+
+    .chat-message {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+
+    .user-message {
+      background-color: #2196F3;
+      color: white;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .bot-message {
+      background-color: #e3e3e3;
+      color: #333;
+    }
+
+    #chatInputContainer {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      background-color: white;
+      border-radius: 0 0 10px 10px;
+    }
+
+    #chatInput {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+    }
+
+    #sendBtn {
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-left: 10px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    #sendBtn:hover {
+      background-color: #0b7dda;
+    }
+  </style>
+ </head>
+ <body>
+        <!-- AI Assistant Button -->
+    <button id="aiAssistantBtn">🤖 AI Assistant</button>
+
+    <!-- Chat Window -->
+    <div id="chatWindow">
+        <div id="chatHeader">
+        <span><strong>Form Helper</strong></span>
+        <button id="closeChat">&times;</button>
+        </div>
+        <div id="chatMessages">
+        <div class="chat-message bot-message">
+            Hello! I'm here to help you with questions about filling out this form. Try asking me about email requirements, phone format, or any other form-related questions!
+        </div>
+        </div>
+        <div id="chatInputContainer">
+        <input type="text" id="chatInput" placeholder="Type your question here...">
+        <button id="sendBtn">Send</button>
+        </div>
+    </div>
+    <div id="container">
+        <main>
+        <h2>Feedback</h2>
+        <h3>Love something? Hate something? Let us know!</h3>
+        Note: Fields marked with an asterisk(*) are mandatory
+        <br><br>
+        
+        <form id="feedbackForm" method="post" novalidate>
+            <div class="field-group">
+            <label>Title*:</label>
+            <input type="radio" name="title" id="miss" value="miss" required/>Miss
+            <input type="radio" name="title" id="mr" value="mr" required/>Mr.
+            <input type="radio" name="title" id="mrs" value="mrs" required/>Mrs.
+            <span class="error-message" id="titleError"></span>
+            </div>
+
+            <div class="field-group">
+            <label for="firstName">First Name*:</label>
+            <input type="text" name="firstName" id="firstName" placeholder="First Name" maxlength="50"/>
+            <span class="error-message" id="firstNameError"></span>
+            </div>
+
+            <div class="field-group">
+            <label for="lastName">Last Name*:</label>
+            <input type="text" name="lastName" id="lastName" placeholder="Last Name" maxlength="50"/>
+            <span class="error-message" id="lastNameError"></span>
+            </div>
+
+            <div class="field-group">
+            <label for="emailId">Email Id*:</label>
+            <input type="text" name="emailId" id="emailId" placeholder="yourname@northeastern.edu"/>
+            <span class="error-message" id="emailIdError"></span>
+            </div>
+
+            <div class="field-group">
+            <label for="phoneNumber">Phone Number*:</label>
+            <input type="text" name="phoneNumber" id="phoneNumber" placeholder="(XXX) XXX-XXXX" maxlength="14"/>
+            <span class="error-message" id="phoneNumberError"></span>
+            </div>
+
+            <div class="field-group">
+            <label for="zipcode">ZipCode*:</label>
+            <input type="text" name="zipcode" id="zipcode" placeholder="XXXXX" maxlength="5"/>
+            <span class="error-message" id="zipcodeError"></span>
+            </div>
+
+            <div class="field-group">
+            <label for="address2">Street Address 2:</label>
+            <input type="text" name="address2" id="address2" placeholder="Apt, Suite, etc. (Optional)" maxlength="100"/>
+            <span class="char-counter" id="address2Counter">0/100 characters used</span>
+            <span class="error-message" id="address2Error"></span>
+            </div>
+
+            <div class="field-group">
+            <label for="hearAbout">How did you hear*:</label>
+            <input type='checkbox' name="source" value="Facebook" id="sourceFacebook"/> Facebook
+            <input type='checkbox' name="source" value="Google" id="sourceGoogle"/> Google
+            <input type='checkbox' name="source" value="Yelp" id="sourceYelp"/> Yelp
+            <span class="error-message" id="sourceError"></span>
+            </div>
+
+            <div class="field-group">
+            <label for="drinkSelect">Select Drink*:</label>
+            <select name="drinkSelect" id="drinkSelect">
+                <option value="">-- Select a drink --</option>
+                <option value="Hot Black Tea - Keemun">Hot Black Tea - Keemun</option>
+                <option value="Iced Green Tea">Iced Green Tea</option>
+                <option value="Coffee">Coffee</option>
+                <option value="Lemonade">Lemonade</option>
+                <option value="Smoothie">Smoothie</option>
+            </select>
+            <span class="error-message" id="drinkSelectError"></span>
+            </div>
+
+            <div id="dynamicCheckboxContainer"></div>
+
+            <div class="field-group">
+            <label for="comments">Comments*:</label>
+            <textarea name="comments" id="comments" placeholder="Your comments" rows="5" cols="25" maxlength="500"></textarea>
+            <span class="error-message" id="commentsError"></span>
+            </div>
+
+            <input type="submit" id="submitBtn" disabled>
+            <input type="reset" id="resetBtn">
+        </form>
+
+        <div id="resultsContainer"></div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

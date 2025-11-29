@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  title: Assignment 8 - User Management API
+  description: RESTful API for user management with image upload
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /user/create:
+    post:
+      summary: Create a new user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fullName, email, password]
+              properties:
+                fullName:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: john.doe@example.com
+                password:
+                  type: string
+                  example: Password123!
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User created successfully.
+        '400':
+          description: Validation failed
+
+  /user/edit:
+    put:
+      summary: Update user details
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  example: john.doe@example.com
+                fullName:
+                  type: string
+                  example: John Smith
+                password:
+                  type: string
+                  example: NewPassword123!
+      responses:
+        '200':
+          description: User updated successfully
+        '400':
+          description: Validation failed
+        '404':
+          description: User not found
+
+  /user/delete:
+    delete:
+      summary: Delete a user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  example: john.doe@example.com
+      responses:
+        '200':
+          description: User deleted successfully
+        '404':
+          description: User not found
+
+  /user/getAll:
+    get:
+      summary: Retrieve all users
+      tags: [Users]
+      responses:
+        '200':
+          description: List of users with hashed passwords
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        fullName:
+                          type: string
+                        email:
+                          type: string
+                        password:
+                          type: string
+
+  /user/uploadImage:
+    post:
+      summary: Upload user image
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [email, image]
+              properties:
+                email:
+                  type: string
+                  example: john.doe@example.com
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Image uploaded successfully
+        '400':
+          description: Invalid file format or image already exists
+        '404':
+          description: User not found

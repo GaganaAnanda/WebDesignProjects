@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Calculator App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <h1>Calculator Login</h1>
+            <p class="subtitle">Sign in with your Northeastern account</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="text" 
+                        id="email" 
+                        name="email" 
+                        placeholder="yourname@northeastern.edu"
+                        autocomplete="email"
+                    >
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                    >
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <span>Remember Me</span>
+                    </label>
+                </div>
+
+                <span class="error-message" id="loginError"></span>
+                <span class="success-message" id="successMessage"></span>
+
+                <button type="submit" id="loginBtn" class="btn btn-primary" disabled>
+                    Login
+                </button>
+            </form>
+
+            <div class="demo-credentials" style="display: none;">
+                <p><strong>Demo Credentials:</strong></p>
+                <p>Email: ananda@northeastern.edu | Password: Password123</p>
+                <p>Email: indira@northeastern.edu | Password: SecurePass456</p>
+                <p>Email: davan@northeastern.edu | Password: MyPass789</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

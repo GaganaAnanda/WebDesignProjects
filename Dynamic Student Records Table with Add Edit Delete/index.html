@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="header">
+        <div>GAGANA ANANDA</div>
+        <div>NUID:002561357</div>
+    </div>
+
+    <table id="tab">
+        <caption id="cap">Student Records:</caption>
+        <br>
+        <thead>
+            <tr>
+                <th></th>
+                <th>STUDENT</th>
+                <th>ADVISOR</th>
+                <th>AWARD STATUS</th>
+                <th>SEMESTER</th>
+                <th>TYPE</th>
+                <th>BUDGET</th>
+                <th>PERCENTAGE</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Empty on load -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="8">Total Budget:567890</td>
+            </tr>
+        </tfoot>
+    </table>
+    <br><br>
+    <button type="button" id="submitbtn" disabled onclick="submitSelected()">SUBMIT SELECTED AWARDS</button>
+    <button type="button" onclick="addRecord()">ADD NEW STUDENT</button>
+</body>
+</html>

@@ -1,0 +1,24 @@
+// Get spacing value from the map
+@function get-spacing($size) {
+  @if map-has-key($spacing-sizes, $size) {
+    @return map-get($spacing-sizes, $size);
+  } @else {
+    @warn "Spacing size '#{$size}' not found!";
+    @return $spacing-base;
+  }
+}
+
+// Convert pixels to rem
+@function to-rem($pixels) {
+  @return ($pixels / 16) * 1rem;
+}
+
+// Lighten color by percentage
+@function tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+// Darken color by percentage
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
