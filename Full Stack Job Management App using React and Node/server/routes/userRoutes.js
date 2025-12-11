@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const User = require('../models/user');
 const { validateEmail, validateFullName, validatePassword } = require('../utils/validation');
+const { verifyToken, verifyAdmin } = require('../middleware/auth');
 
 // Initialize logger
 const logger = require('debug')('app:routes');
@@ -61,6 +63,12 @@ router.post('/create', async (req, res) => {
     if (!validateEmail(email)) {
       logger('❌ [400] Validation failed - Invalid email format:', email);
       return res.status(400).json({ error: 'Validation failed.' });
+    }
+
+    // Validate northeastern.edu email domain
+    if (!email.endsWith('@northeastern.edu')) {
+      logger('❌ [400] Validation failed - Email must be @northeastern.edu:', email);
+      return res.status(400).json({ error: 'Validation failed. Email must be @northeastern.edu.' });
     }
 
     if (!validateFullName(fullName)) {
@@ -131,9 +139,25 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
-    logger('✅ [200] User logged in successfully:', email);
+    // Generate JWT token
+    const tokenPayload = {
+      id: user._id,
+      email: user.email,
+      fullName: user.fullName,
+      type: user.type,
+      imagePath: user.imagePath
+    };
+
+    const token = jwt.sign(
+      tokenPayload,
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+    );
+
+    logger('✅ [200] User logged in successfully with JWT token:', email);
     res.status(200).json({ 
       message: 'Login successful.',
+      token: token,
       user: {
         fullName: user.fullName,
         email: user.email,
@@ -147,8 +171,8 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// PUT /user/edit - Update user details
-router.put('/edit', async (req, res) => {
+// PUT /user/edit - Update user details (Protected route)
+router.put('/edit', verifyToken, async (req, res) => {
   try {
     logger('📤 [PUT] /user/edit - Request received');
     logger('Request body:', { email: req.body.email });
@@ -197,8 +221,8 @@ router.put('/edit', async (req, res) => {
   }
 });
 
-// DELETE /user/delete - Delete a user
-router.delete('/delete', async (req, res) => {
+// DELETE /user/delete - Delete a user (Protected - Admin only)
+router.delete('/delete', verifyToken, verifyAdmin, async (req, res) => {
   try {
     logger('📤 [DELETE] /user/delete - Request received');
     logger('Request body:', { email: req.body.email });
@@ -238,7 +262,8 @@ router.delete('/delete', async (req, res) => {
   }
 });
 
-router.get('/getAll', async (req, res) => {
+// GET /user/getAll - Get all users (Protected - Admin only)
+router.get('/getAll', verifyToken, verifyAdmin, async (req, res) => {
   try {
     logger('📤 [GET] /user/getAll - Request received');
     
@@ -259,8 +284,34 @@ router.get('/getAll', async (req, res) => {
   }
 });
 
-// GET /users - Fetch all users without passwords
-router.get('/', async (req, res) => {
+// GET /user/showcase - Get users with images (Public route for Company Showcase)
+router.get('/showcase', async (req, res) => {
+  try {
+    logger('📤 [GET] /user/showcase - Request received');
+    
+    // Get all users who have images
+    const users = await User.find(
+      { 'images.0': { $exists: true } }, // Only users with at least one image
+      'fullName email images'
+    );
+    
+    logger('✅ [200] Retrieved', users.length, 'users with images');
+    
+    const userList = users.map(user => ({
+      fullName: user.fullName,
+      email: user.email,
+      images: user.images
+    }));
+
+    res.status(200).json({ users: userList });
+  } catch (error) {
+    logger('❌ [500] Internal server error:', error.message);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// GET /users - Fetch all users without passwords (Protected - Admin only)
+router.get('/', verifyToken, verifyAdmin, async (req, res) => {
   try {
     logger('📤 [GET] /users - Request received');
     
@@ -278,8 +329,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /user/uploadImage - Upload user image
-router.post('/uploadImage', upload.single('image'), async (req, res) => {
+// POST /user/uploadImage - Upload user image (Protected route)
+router.post('/uploadImage', verifyToken, upload.single('image'), async (req, res) => {
   try {
     logger('📤 [POST] /user/uploadImage - Request received');
     logger('Request body:', { email: req.body.email, imageName: req.body.imageName });
@@ -353,7 +404,7 @@ router.post('/uploadImage', upload.single('image'), async (req, res) => {
   }
 });
 
-// GET /user/images/:email - Fetch all images uploaded by a user
+// GET /user/images/:email - Fetch all images uploaded by a user (Public route for showcase)
 router.get('/images/:email', async (req, res) => {
   try {
     logger('📤 [GET] /user/images/:email - Request received');
@@ -381,6 +432,54 @@ router.get('/images/:email', async (req, res) => {
       fullName: user.fullName,
       totalImages: images.length,
       images: images
+    });
+  } catch (error) {
+    logger('❌ [500] Internal server error:', error.message);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// DELETE /user/deleteImage - Delete a specific image (Protected route)
+router.delete('/deleteImage', verifyToken, async (req, res) => {
+  try {
+    logger('📤 [DELETE] /user/deleteImage - Request received');
+    logger('Request body:', { email: req.body.email, imagePath: req.body.imagePath });
+
+    const { email, imagePath } = req.body;
+
+    if (!email || !imagePath) {
+      logger('❌ [400] Email and imagePath are required');
+      return res.status(400).json({ error: 'Email and imagePath are required.' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      logger('❌ [404] User not found:', email);
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    // Find the image in the user's images array
+    const imageIndex = user.images.findIndex(img => img.path === imagePath);
+    if (imageIndex === -1) {
+      logger('❌ [404] Image not found:', imagePath);
+      return res.status(404).json({ error: 'Image not found.' });
+    }
+
+    // Delete the physical file
+    const fullPath = path.join(__dirname, '..', 'images', imagePath);
+    if (fs.existsSync(fullPath)) {
+      fs.unlinkSync(fullPath);
+      logger('📷 Physical file deleted:', fullPath);
+    }
+
+    // Remove image from array
+    user.images.splice(imageIndex, 1);
+    await user.save();
+
+    logger('✅ [200] Image deleted successfully:', imagePath);
+    res.status(200).json({ 
+      message: 'Image deleted successfully.',
+      remainingImages: user.images.length
     });
   } catch (error) {
     logger('❌ [500] Internal server error:', error.message);

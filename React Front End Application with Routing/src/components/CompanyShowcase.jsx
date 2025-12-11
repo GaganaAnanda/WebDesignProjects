@@ -5,23 +5,26 @@ import {
   Box,
   Alert,
   CircularProgress,
-  Button
+  Grid,
+  Card,
+  CardMedia,
+  CardContent
 } from '@mui/material';
 import axios from 'axios';
 
 function CompanyShowcase() {
   const [images, setImages] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchUserImages();
+    fetchCompanyImages();
   }, []);
 
-  const fetchUserImages = async () => {
+  const fetchCompanyImages = async () => {
     try {
       setLoading(true);
+      
       const userEmail = sessionStorage.getItem('userEmail');
       
       if (!userEmail) {
@@ -30,33 +33,37 @@ function CompanyShowcase() {
         return;
       }
 
-      const response = await axios.get(`http://localhost:3000/user/images/${userEmail}`);
-      console.log('Images response:', response.data);
-      setImages(response.data.images || []);
+      // Fetch the current user's data
+      const response = await axios.get('http://localhost:3000/user/getAll');
+      console.log('Users response:', response.data);
+      
+      // Find the logged-in user and get their image
+      const allImages = [];
+      if (response.data.users) {
+        const currentUser = response.data.users.find(user => user.email === userEmail);
+        
+        if (currentUser && currentUser.imagePath) {
+          allImages.push({
+            path: currentUser.imagePath,
+            companyName: currentUser.fullName || currentUser.email || 'Company',
+            filename: currentUser.imagePath.split('/').pop()
+          });
+        }
+      }
+      
+      setImages(allImages);
       setError('');
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      setError('Failed to load images.');
+      setError('Failed to load company images.');
       console.error('Error:', err);
     }
   };
 
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -64,7 +71,7 @@ function CompanyShowcase() {
 
   if (error) {
     return (
-      <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
         <Alert severity="error">{error}</Alert>
       </Container>
     );
@@ -72,58 +79,53 @@ function CompanyShowcase() {
 
   if (images.length === 0) {
     return (
-      <Container maxWidth="md" sx={{ mt: 4 }}>
-        <Alert severity="info">No images uploaded yet.</Alert>
-      </Container>
-    );
-  }
-
-  const currentImage = images[currentIndex];
-
-  if (!currentImage || !currentImage.path) {
-    return (
-      <Container maxWidth="md" sx={{ mt: 4 }}>
-        <Alert severity="error">Error: Image data is invalid.</Alert>
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <Alert severity="info">No company image available for your profile. Please upload an image via the backend API.</Alert>
       </Container>
     );
   }
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h5" sx={{ mb: 3 }}>
-        Image Gallery
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
+        Company Showcase
+      </Typography>
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+        Explore our partner companies and their profiles
       </Typography>
 
-      <Box sx={{ border: '1px solid #ccc', p: 2, mb: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-          <Button onClick={goToPrevious}>
-            ← Prev
-          </Button>
-
-          <Box sx={{ textAlign: 'center' }}>
-            <img
-              src={`http://localhost:3000/images/${currentImage.path}`}
-              alt={currentImage.name}
-              style={{
-                maxWidth: '100%',
-                maxHeight: '400px',
-                objectFit: 'contain'
-              }}
-            />
-          </Box>
-
-          <Button onClick={goToNext}>
-            Next →
-          </Button>
-        </Box>
-
-        <Box sx={{ mt: 2, textAlign: 'center' }}>
-          <Typography variant="body1"><strong>{currentImage.name}</strong></Typography>
-          <Typography variant="body2">
-            {currentIndex + 1} / {images.length}
-          </Typography>
-        </Box>
-      </Box>
+      <Grid container spacing={3}>
+        {images.map((image, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card sx={{ 
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              transition: 'transform 0.2s',
+              '&:hover': {
+                transform: 'scale(1.03)',
+                boxShadow: 6
+              }
+            }}>
+              <CardMedia
+                component="img"
+                height="200"
+                image={`http://localhost:3000${image.path}`}
+                alt={image.companyName}
+                sx={{ objectFit: 'cover' }}
+              />
+              <CardContent>
+                <Typography variant="h6" component="div">
+                  {image.companyName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {image.filename}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </Container>
   );
 }

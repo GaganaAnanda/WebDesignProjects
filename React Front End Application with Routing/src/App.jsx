@@ -11,7 +11,6 @@ import About from './components/About';
 import JobListings from './components/JobListings';
 import Contact from './components/Contact';
 import CompanyShowcase from './components/CompanyShowcase';
-import ImageUpload from './components/ImageUpload';
 
 const theme = createTheme({
   palette: {
@@ -65,10 +64,6 @@ function App() {
             <Route 
               path="/companies" 
               element={isAuthenticated ? <CompanyShowcase /> : <Navigate to="/" />} 
-            />
-            <Route 
-              path="/upload" 
-              element={isAuthenticated ? <ImageUpload /> : <Navigate to="/" />} 
             />
             <Route 
               path="/contact" 

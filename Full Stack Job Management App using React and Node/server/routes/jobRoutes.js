@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Job = require('../models/job');
+const { verifyToken, verifyAdmin } = require('../middleware/auth');
 
 const logger = require('debug')('app:routes');
 
-// POST /create/job - Create a new job
-router.post('/create', async (req, res) => {
+// POST /create/job - Create a new job (Protected - Admin only)
+router.post('/create', verifyToken, verifyAdmin, async (req, res) => {
   try {
     logger('📤 [POST] /job/create - Request received');
     logger('Request body:', { companyName: req.body.companyName, jobTitle: req.body.jobTitle });

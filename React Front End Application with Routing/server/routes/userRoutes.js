@@ -234,14 +234,15 @@ router.get('/getAll', async (req, res) => {
   try {
     logger('📤 [GET] /user/getAll - Request received');
     
-    const users = await User.find({}, 'fullName email password');
+    const users = await User.find({}, 'fullName email password imagePath');
     
     logger('✅ [200] Retrieved', users.length, 'users');
     
     const userList = users.map(user => ({
       fullName: user.fullName,
       email: user.email,
-      password: user.password
+      password: user.password,
+      imagePath: user.imagePath
     }));
 
     res.status(200).json({ users: userList });
@@ -255,9 +256,9 @@ router.get('/getAll', async (req, res) => {
 router.post('/uploadImage', upload.single('image'), async (req, res) => {
   try {
     logger('📤 [POST] /user/uploadImage - Request received');
-    logger('Request body:', { email: req.body.email, imageName: req.body.imageName });
+    logger('Request body:', { email: req.body.email });
     
-    const { email, imageName } = req.body;
+    const { email } = req.body;
 
     if (!email) {
       if (req.file) {
@@ -265,14 +266,6 @@ router.post('/uploadImage', upload.single('image'), async (req, res) => {
       }
       logger('❌ [400] Email is required');
       return res.status(400).json({ error: 'Email is required.' });
-    }
-
-    if (!imageName) {
-      if (req.file) {
-        fs.unlinkSync(req.file.path);
-      }
-      logger('❌ [400] Image name is required');
-      return res.status(400).json({ error: 'Image name is required.' });
     }
 
     if (!req.file) {
@@ -289,40 +282,22 @@ router.post('/uploadImage', upload.single('image'), async (req, res) => {
       return res.status(404).json({ error: 'User not found.' });
     }
 
-    const filePath = req.file.filename;
-    
-    // Initialize images array if it doesn't exist
-    if (!user.images) {
-      user.images = [];
-    }
-
-    // Add new image with name to images array
-    user.images.push({
-      name: imageName,
-      path: filePath
-    });
+    // Update imagePath with the new file path
+    user.imagePath = `/images/${req.file.filename}`;
     
     await user.save();
 
-    logger('✅ [201] Image uploaded successfully for user:', email, 'File:', filePath);
-    res.status(201).json({ 
+    logger('✅ [200] Image uploaded successfully for user:', email, 'File:', user.imagePath);
+    res.status(200).json({ 
       message: 'Image uploaded successfully.',
-      imageName: imageName,
-      filePath: filePath,
-      totalImages: user.images.length
+      imagePath: user.imagePath
     });
   } catch (error) {
     if (req.file) {
       fs.unlinkSync(req.file.path);
     }
-    
-    if (error.message === 'Invalid file format. Only JPEG, PNG, and GIF are allowed.') {
-      logger('❌ [400] Invalid file format:', error.message);
-      return res.status(400).json({ error: error.message });
-    }
-    
     logger('❌ [500] Internal server error:', error.message);
-    res.status(500).json({ error: 'Internal server error.' });
+    res.status(500).json({ error: 'Something went wrong!' });
   }
 });
 

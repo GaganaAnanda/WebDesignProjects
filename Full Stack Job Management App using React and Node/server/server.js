@@ -6,8 +6,8 @@ const morgan = require('morgan');
 const debug = require('debug')('app:*');
 const userRoutes = require('./routes/userRoutes');
 const jobRoutes = require('./routes/jobRoutes');
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
+// const swaggerUi = require('swagger-ui-express');
+// const YAML = require('yamljs');
 const path = require('path');
 
 const app = express();
@@ -49,8 +49,9 @@ mongoose.connect(process.env.MONGODB_URI, {
   process.exit(1);
 });
 
-const swaggerDocument = YAML.load('./swagger.yaml');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Swagger documentation (commented out - not required for Assignment 10)
+// const swaggerDocument = YAML.load('./swagger.yaml');
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/user', userRoutes);
 app.use('/job', jobRoutes);

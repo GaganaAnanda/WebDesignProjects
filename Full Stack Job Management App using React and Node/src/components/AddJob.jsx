@@ -32,7 +32,7 @@ function AddJob() {
     if (message) {
       const timer = setTimeout(() => {
         dispatch(clearJobMessage());
-        navigate('/admin/jobs');
+        navigate('/admin/employees');
       }, 2000);
       return () => clearTimeout(timer);
     }

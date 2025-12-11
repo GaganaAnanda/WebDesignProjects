@@ -31,11 +31,17 @@ export const login = (email, password) => async (dispatch) => {
 
     if (response.status === 200) {
       const user = response.data.user;
+      const token = response.data.token;
       
+      // Store JWT token and user info
+      sessionStorage.setItem('token', token);
       sessionStorage.setItem('isAuthenticated', 'true');
       sessionStorage.setItem('userEmail', user.email);
       sessionStorage.setItem('userName', user.fullName);
       sessionStorage.setItem('userType', user.type);
+
+      // Set default Authorization header for all future requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
       dispatch({
         type: LOGIN_SUCCESS,
@@ -55,18 +61,27 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
+  // Remove JWT token and user info
+  sessionStorage.removeItem('token');
   sessionStorage.removeItem('isAuthenticated');
   sessionStorage.removeItem('userEmail');
   sessionStorage.removeItem('userName');
   sessionStorage.removeItem('userType');
+
+  // Remove Authorization header
+  delete axios.defaults.headers.common['Authorization'];
 
   dispatch({ type: LOGOUT });
 };
 
 export const setAuth = () => (dispatch) => {
   const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
+  const token = sessionStorage.getItem('token');
   
-  if (isAuthenticated) {
+  if (isAuthenticated && token) {
+    // Restore Authorization header on page reload
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
     const user = {
       email: sessionStorage.getItem('userEmail'),
       fullName: sessionStorage.getItem('userName'),
